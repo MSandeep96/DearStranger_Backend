@@ -6,10 +6,11 @@ var Response = require('./response/signUserRes.js');
 // @Route ../user/signuser @POST 
 
 
-router.post('/',[validate,doesExist,createUser]);
+
+router.post('/',[validateBody ,doesExist,createUser]);
 
 //check if data is valid
-function validate(req,res,next){
+function validateBody(req,res,next){
     var userObj = new User(req.body);
     userObj.validate((err)=>{
         if(err){
