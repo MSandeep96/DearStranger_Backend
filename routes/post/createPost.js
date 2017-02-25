@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var Post = require('../../database/Post/PostSchema');
-var Response = require('./response/createPostResponse');
+var Response = require('./response/postResponse');
 
 // ../post/createpost @POST
 
@@ -22,7 +22,7 @@ function isValidPost(req,res,next){
             req.body=userPost;
             next();
         }
-    })
+    });
 }
 
 function savePost(req,res){
@@ -31,7 +31,7 @@ function savePost(req,res){
         var resp = new Response();
         resp.postCreated(post.server_time);
         res.status(200).send(resp);
-    })
+    });
 }
 
 module.exports=router;

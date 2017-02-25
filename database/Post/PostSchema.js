@@ -17,6 +17,15 @@ var postSchema = new Schema({
     server_time : {
         type : String,
         required : true
+    },
+    date_rep : {
+        type : Number,
+        required : true
+    },
+    status : {
+        type: String,
+        enum : ['write','match','read','reply'],
+        default : 'write'
     }
 });
 

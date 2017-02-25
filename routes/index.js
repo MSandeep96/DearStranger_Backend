@@ -13,6 +13,10 @@ var auth_failed_response = {
 
 // TODO: Make more secure 
 router.use(function(req,res,next){
+    if(req.method==='GET'){ 
+        next();
+        return;
+    }
     if(req.body['AUTH_DEVICE_TOKEN']===AUTH_DEVICE_TOKEN){
         delete req.body['AUTH_DEVICE_TOKEN'];
         next();
