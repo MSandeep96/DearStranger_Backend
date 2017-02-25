@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var users = require('./user');
+var post = require('./post');
 
 // TODO: Load the secret from process.env
 const AUTH_DEVICE_TOKEN = "LALALALA";
@@ -21,5 +22,6 @@ router.use(function(req,res,next){
 });
 
 router.use('/user',users);
+router.use('/post',post);
 
 module.exports = router;

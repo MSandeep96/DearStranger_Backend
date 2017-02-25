@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../../database/Users/UserSchema');
 var Response = require('./response/signUserRes.js');
+var randTokenGen = require('rand-token');
 
 // @Route ../user/signuser @POST 
 
@@ -31,14 +32,31 @@ function doesExist(req,res,next){
     User.findOne({'email':req.body.email},(err,doc)=>{
         if(err){
             //error
-            res.status(400).send(err);
+            var resp = new Response();
+            resp.errorOccured(err,"Something went wrong");
+            res.status(400).send(resp);
         }else if(!doc){
             //no user
             next();
         }else{
             //user present
+            storeUser(doc,res);
+        }
+    });
+}
+
+
+function storeUser(doc,res){
+    doc.access_token = randTokenGen.generate(12);
+    doc.save((err,newDoc)=>{
+        if(err){
+            //error
             var resp = new Response();
-            resp.userLoggedIn(doc);
+            resp.errorOccured(err,"Something went wrong");
+            res.status(400).send(resp);
+        }else{
+            var resp = new Response();
+            resp.userLoggedIn(newDoc);
             res.status(200).send(resp);
         }
     });
@@ -46,8 +64,9 @@ function doesExist(req,res,next){
 
 //if user doesn't exist, create the user
 function createUser(req,res){
-    var user;
+    req.body.access_token = randTokenGen.generate(12);
     req.body.save((err,user)=>{
+        if(err) throw err;
         var resp = new Response();
         resp.userCreated(user);
         res.status(200).send(resp);

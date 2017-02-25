@@ -1,5 +1,3 @@
-var randTokenGen = require('rand-token');
-
 //base response
 function Response(){
     this.success=false;
@@ -10,7 +8,7 @@ Response.prototype.userLoggedIn=function(userDoc){
     this.success = true;
     this.response = "Success";
     this.new_user = false;
-    this.access_token = randTokenGen.generate(12);
+    this.access_token = userDoc.access_token;
     this.user_id = userDoc['_id'];
 }
 
@@ -18,7 +16,7 @@ Response.prototype.userCreated=function(userDoc){
     this.success = true;
     this.response = "Success";
     this.new_user = true;
-    this.access_token = randTokenGen.generate(12);
+    this.access_token = userDoc.access_token;
     this.user_id = userDoc['_id'];
 }
 
