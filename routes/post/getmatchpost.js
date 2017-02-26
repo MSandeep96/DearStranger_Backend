@@ -4,24 +4,25 @@ var router = express.Router();
 var Post = require('../../database/Post/PostSchema');
 var Response = require('./response/postResponse');
 
-// ../post/matchpost @POST 
+// ../post/getmatchpost?user_id=x&access_token=y @GET
 
-router.post('/', matchpost);
+router.get('/', getmatchpost);
 
-function matchpost(req, res) {
+function getmatchpost(req, res) {
     Post
-        .findOneAndUpdate({ status: 'write', user_id : { $ne : req.body.user_id } },
-        { $set: { status: 'match', match_to: req.body.user_id } },
-        { new: true},
-        (err, doc) => {
+        .findOne({
+            match_to: req.query.user_id,
+            $or: [{ status: 'match' }, { status: 'read' }]
+        })
+        .exec((err, post) => {
             if (err) throw err;
-            if (!doc) {
+            if (!post) {
                 var resp = new Response();
                 resp.noPostsAvailable();
                 res.status(200).send(resp);
             } else {
                 var resp = new Response();
-                resp.matchpost(doc);
+                resp.gotPost(post);
                 res.status(200).send(resp);
             }
         });

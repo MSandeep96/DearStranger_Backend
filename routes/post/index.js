@@ -7,6 +7,7 @@ var createpost = require('./createPost');
 var fetchpost = require('./fetchPosts');
 var getpost = require('./getPost');
 var matchpost = require('./matchPost');
+var getmatchpost = require('./getmatchpost');
 
 var baseResponse = {
     success : false,
@@ -42,5 +43,6 @@ router.use('/createpost',createpost);
 router.use('/fetchpost',fetchpost);
 router.use('/getpost',getpost);
 router.use('/matchpost',matchpost);
+router.use('/getmatchpost',getmatchpost);
 
 module.exports = router;
