@@ -26,7 +26,8 @@ var postSchema = new Schema({
         type: String,
         enum : ['write','match','read','reply'],
         default : 'write'
-    }
+    },
+    match_to : String
 });
 
 module.exports = mongoose.model('Post',postSchema);

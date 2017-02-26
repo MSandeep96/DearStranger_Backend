@@ -4,9 +4,19 @@ function Response(){
     this.response="Base Response";
 };
 
+Response.prototype.noPostsAvailable = function(){
+    this.response = "No posts available";
+}
+
 Response.prototype.gotPost = function(post){
     this.success = true;
-    this.response = "Fetched";
+    this.response = "Success";
+    this.post = post;
+}
+
+Response.prototype.matchpost = function(post){
+    this.success = true;
+    this.response = "Success";
     this.post = post;
 }
 

@@ -6,6 +6,7 @@ var User = require('../../database/Users/UserSchema');
 var createpost = require('./createPost');
 var fetchpost = require('./fetchPosts');
 var getpost = require('./getPost');
+var matchpost = require('./matchPost');
 
 var baseResponse = {
     success : false,
@@ -40,5 +41,6 @@ router.use(function(req,res,next){
 router.use('/createpost',createpost);
 router.use('/fetchpost',fetchpost);
 router.use('/getpost',getpost);
+router.use('/matchpost',matchpost);
 
 module.exports = router;
