@@ -12,16 +12,25 @@ var userSchema = new Schema({
     },
     login_type: {
         type: String,
-        enum: ['google','facebook'],
+        enum: ['google','facebook','both'],
         required: true
     },
     social_id: {
         type: String,
         required: true
     },
-    access_token: String,
+    google_id : String,
+    facebook_id : String,
     prof_pic: String,
-    fcm_token: String
+    fcm_token: String,
+    qi : {
+        type: Number,
+        default : 0
+    },
+    ai : {
+        type: Number,
+        default : 0
+    }
 });
 
 module.exports = mongoose.model('User',userSchema);

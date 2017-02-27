@@ -8,18 +8,25 @@ var randTokenGen = require('rand-token');
 
 
 
-router.post('/',[validateBody ,doesExist,createUser]);
+router.post('/', [validateBody, doesExist, createUser]);
 
 //check if data is valid
-function validateBody(req,res,next){
+function validateBody(req, res, next) {
+    if ((req.body['login_type'] === 'google' && !google_id)
+        || (req.body['login_type'] === 'facebook' && !facebook_id)
+        || req.body['login_type']==='both') {
+        var resp = new Respone();
+        resp.errorOccured(err,"Invalid params");
+        res.status(400).send(resp);
+    }
     var userObj = new User(req.body);
-    userObj.validate((err)=>{
-        if(err){
+    userObj.validate((err) => {
+        if (err) {
             //invalid data
             var resp = new Response();
-            resp.errorOccured(err,"Invalid params");
+            resp.errorOccured(err, "Invalid params");
             res.status(400).send(resp);
-        }else{
+        } else {
             //valid data
             req.body = userObj;
             next();
@@ -28,33 +35,41 @@ function validateBody(req,res,next){
 }
 
 //check if user exists
-function doesExist(req,res,next){
-    User.findOne({'email':req.body.email},(err,doc)=>{
-        if(err){
+function doesExist(req, res, next) {
+    User.findOne({ 'email': req.body.email }, (err, doc) => {
+        if (err) {
             //error
             var resp = new Response();
-            resp.errorOccured(err,"Something went wrong");
+            resp.errorOccured(err, "Something went wrong");
             res.status(400).send(resp);
-        }else if(!doc){
+        } else if (!doc) {
             //no user
             next();
-        }else{
+        } else {
             //user present
-            storeUser(doc,res);
+            storeUser(doc, req,res);
         }
     });
 }
 
 
-function storeUser(doc,res){
+function storeUser(doc, req, res) {
+    if(doc.login_type != 'both' && doc.login_type != req.body['login_type'] ){
+        doc.login_type = 'both';
+        if(req.body.login_type==='google'){
+            doc.google_id=req.body.google_id;
+        }else{
+            doc.facebook_id = req.body.facebook_id;
+        }
+    }
     doc.access_token = randTokenGen.generate(12);
-    doc.save((err,newDoc)=>{
-        if(err){
+    doc.save((err, newDoc) => {
+        if (err) {
             //error
             var resp = new Response();
-            resp.errorOccured(err,"Something went wrong");
+            resp.errorOccured(err, "Something went wrong");
             res.status(400).send(resp);
-        }else{
+        } else {
             var resp = new Response();
             resp.userLoggedIn(newDoc);
             res.status(200).send(resp);
@@ -63,10 +78,10 @@ function storeUser(doc,res){
 }
 
 //if user doesn't exist, create the user
-function createUser(req,res){
+function createUser(req, res) {
     req.body.access_token = randTokenGen.generate(12);
-    req.body.save((err,user)=>{
-        if(err) throw err;
+    req.body.save((err, user) => {
+        if (err) throw err;
         var resp = new Response();
         resp.userCreated(user);
         res.status(200).send(resp);
