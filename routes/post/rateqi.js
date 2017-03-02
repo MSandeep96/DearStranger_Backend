@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var Post = require('../../database/Post/PostSchema');
+var User = require('../../database/Users/UserSchema');
 var Response = require('./response/postResponse');
 
 // ../post/rateqi  @Post
@@ -15,8 +16,6 @@ var Response = require('./response/postResponse');
 
 router.post('/',[getPost,updatePost]);
 
-var alreadyRated = false;
-var previousRating = 0;
 
 function getPost(req,res){
     Post.findById(req.body['post_id'],function(err,post){
@@ -31,13 +30,13 @@ function getPost(req,res){
             resp.errorOccured("Unauthorized","Invalid request");
             resp.status(401).send(resp);
             return;
-        }
-        if(post.qi_given!==0){
-            alreadyRated = true;
-            previousRating = post.qi_given;
+        } 
+        req.local_vars.alreadyRated = (post.ai_given != 0);
+        if (req.local_vars.alreadyRated) {
+            req.local_vars.previousRating = post.ai_given;
         }
         updatePost(req,post);
-        updateUserRating(post);
+        updateUserRating(req,post);
         res.sendStatus(200);
     });
 }
@@ -50,18 +49,18 @@ function updatePost(req,post){
     });
 }
 
-function updateUserRating(post){
+function updateUserRating(req,post){
     User.findById(post.user_id,(err,user)=>{
         if(err)
             throw err;
-        if(alreadyRated){
-            var presentRating = (user.qi* user.qi_voters + post.qi_rate - previousRating)/user.qi_voters;
+        if(req.local_vars.alreadyRated){
+            var presentRating = (user.qi* user.qi_voters + req.body.qi_rate - req.local_vars.previousRating)/user.qi_voters;
             user.update({qi: presentRating},(err)=>{
                 if(err)
                     throw err;
             });
         }else{
-            var presentRating = (user.qi * user.qi_voters + post.qi_rate)/(user.qi_voters+1);
+            var presentRating = (user.qi * user.qi_voters + req.body.qi_rate)/(user.qi_voters+1);
             user.update({qi: presentRating,$inc: {qi_voters : 1}},(err)=>{
                 if(err) throw err;
 

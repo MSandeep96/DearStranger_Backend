@@ -3,6 +3,7 @@ var router = express.Router();
 
 var Post = require('../../database/Post/PostSchema');
 var Response = require('./response/postResponse');
+var User = require('../../database/Users/UserSchema');
 
 /*
     Body expected: 
@@ -12,9 +13,6 @@ var Response = require('./response/postResponse');
 */
 
 router.post('/',[getPost,updatePost]);
-
-var alreadyRated = false;
-var previousRating = 0;
 
 function getPost(req,res){
     Post.findById(req.body['post_id'],function(err,post){
@@ -30,12 +28,13 @@ function getPost(req,res){
             resp.status(401).send(resp);
             return;
         }
-        if(post.ai_given!==0){
-            alreadyRated = true;
-            previousRating = post.ai_given;
+        req.local_vars = {};
+        req.local_vars.alreadyRated = (post.ai_given!=0);
+        if(req.local_vars.alreadyRated){
+            req.local_vars.previousRating = post.ai_given;
         }
         updatePost(req,post);
-        updateUserRating(post);
+        updateUserRating(req,post);
         res.sendStatus(200);
     });
 }
@@ -48,18 +47,18 @@ function updatePost(req,post){
     });
 }
 
-function updateUserRating(post){
+function updateUserRating(req,post){
     User.findById(post.match_to,(err,user)=>{
         if(err)
             throw err;
-        if(alreadyRated){
-            var presentRating = (user.ai* user.ai_voters + post.ai_rate - previousRating)/user.ai_voters;
+        if(req.local_vars.alreadyRated){
+            var presentRating = (user.ai* user.ai_voters + req.body.ai_rate - req.local_vars.previousRating)/user.ai_voters;
             user.update({ai: presentRating},(err)=>{
                 if(err)
                     throw err;
             });
         }else{
-            var presentRating = (user.ai * user.ai_voters + post.ai_rate)/(user.ai_voters+1);
+            var presentRating = (user.ai * user.ai_voters + req.body.ai_rate)/(user.ai_voters+1);
             user.update({ai: presentRating,$inc: {ai_voters : 1}},(err)=>{
                 if(err) throw err;
                 
