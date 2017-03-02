@@ -12,7 +12,7 @@ function getmatchpost(req, res) {
     Post
         .findOne({
             match_to: req.query.user_id,
-            $or: [{ status: 'match' }, { status: 'read' }]
+            status : {$in: ['match','read']}
         })
         .exec((err, post) => {
             if (err) throw err;

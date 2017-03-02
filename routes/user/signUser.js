@@ -12,12 +12,24 @@ router.post('/', [validateBody, doesExist, createUser]);
 
 //check if data is valid
 function validateBody(req, res, next) {
-    if ((req.body['login_type'] === 'google' && !google_id)
-        || (req.body['login_type'] === 'facebook' && !facebook_id)
+    // TODO: Dont let user send qi or ai
+
+    if ((req.body['login_type'] === 'google' && !req.body.google_id)
+        || (req.body['login_type'] === 'facebook' && !req.body.facebook_id)
         || req.body['login_type']==='both') {
         var resp = new Respone();
-        resp.errorOccured(err,"Invalid params");
+        resp.errorOccured("Send proper login type and id","Invalid params");
         res.status(400).send(resp);
+    }
+    if(req.body.qi || req.body.ai){
+        var resp = new Response();
+        resp.errorOccured("Do not try to set ai or qi", "Extra Params");
+        res.status(403).send(resp);
+    }
+    if(req.body['login_type']=== 'google'){
+        delete req.body['facebook_id'];
+    }else{
+        delete req.body['google_id'];
     }
     var userObj = new User(req.body);
     userObj.validate((err) => {
@@ -62,7 +74,9 @@ function storeUser(doc, req, res) {
             doc.facebook_id = req.body.facebook_id;
         }
     }
-    doc.access_token = randTokenGen.generate(12);
+    // TODO: 
+    // doc.access_token = randTokenGen.generate(12);
+    doc.access_token = "666";
     doc.save((err, newDoc) => {
         if (err) {
             //error
@@ -79,7 +93,9 @@ function storeUser(doc, req, res) {
 
 //if user doesn't exist, create the user
 function createUser(req, res) {
-    req.body.access_token = randTokenGen.generate(12);
+    // TODO:
+    // req.body.access_token = randTokenGen.generate(12);
+    req.body.access_token = "666";
     req.body.save((err, user) => {
         if (err) throw err;
         var resp = new Response();

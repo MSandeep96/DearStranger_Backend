@@ -5,7 +5,7 @@ function Response(){
 };
 
 Response.prototype.noPostsAvailable = function(){
-    this.response = "No posts available";
+    this.response = "Not matched";
 }
 
 Response.prototype.gotPost = function(post){
@@ -17,6 +17,12 @@ Response.prototype.gotPost = function(post){
 Response.prototype.matchpost = function(post){
     this.success = true;
     this.response = "Success";
+    this.post = post;
+}
+
+Response.prototype.matchedpost = function(post){
+    this.success = true;
+    this.response = "Matched Already";
     this.post = post;
 }
 

@@ -27,6 +27,15 @@ var postSchema = new Schema({
         enum : ['write','match','read','reply'],
         default : 'write'
     },
+    reply: String,
+    qi_given : {
+        type: Number,
+        default:0
+    },
+    ai_given : {
+        type: Number,
+        default:0
+    },
     match_to : String
 });
 

@@ -8,10 +8,16 @@ var Response = require('./response/postResponse');
 
 //user details have been validated
 
-router.post('/',[isValidPost,savePost]);
+router.post('/',[cleanReq,isValidPost,savePost]);
+
+function cleanReq(req,res,next){
+    delete req.body['status'];
+    delete req.body['match_to'];
+    next();
+}
 
 function isValidPost(req,res,next){
-    req.body['server_time'] = new Date();
+    req.body['server_time'] = new Date().getTime();
     var userPost = new Post(req.body);
     userPost.validate((err)=>{
         if(err){

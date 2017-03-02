@@ -28,9 +28,7 @@ app.get('/', (req,res) => {
 //all handling folders here
 app.use('/',routes);
 
-
 //Unhandled urls get routed here
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
 	var err = new Error('Endpoint Not Found');
@@ -45,7 +43,7 @@ var endpoint_invalid = {
 
 // error handler
 app.use(function (err, req, res, next) {
-	endpoint_invalid.response = err.message;
+	endpoint_invalid.response = err.stack;
 	res.status(err.status || 400).send(endpoint_invalid);
 });
 

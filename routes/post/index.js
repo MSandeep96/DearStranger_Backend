@@ -8,6 +8,10 @@ var fetchpost = require('./fetchPosts');
 var getpost = require('./getPost');
 var matchpost = require('./matchPost');
 var getmatchpost = require('./getmatchpost');
+var rateai = require('./rateai');
+var rateqi = require('./rateqi');
+var markRead = require('./markRead');
+var addReply = require('./addReply');
 
 var baseResponse = {
     success : false,
@@ -44,5 +48,9 @@ router.use('/fetchpost',fetchpost);
 router.use('/getpost',getpost);
 router.use('/matchpost',matchpost);
 router.use('/getmatchpost',getmatchpost);
+router.use('/rateqi',rateqi);
+router.use('/rateai',rateai);
+router.use('/addreply',addReply);
+router.use('/markread',markRead);
 
 module.exports = router;
