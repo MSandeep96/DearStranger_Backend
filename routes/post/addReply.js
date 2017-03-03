@@ -4,7 +4,7 @@ var router = express.Router();
 var Post = require('../../database/Post/PostSchema');
 var Response = require('./response/postResponse');
 
-// ../Post/addReply @POST
+// ../post/addreply @POST
 
 /*
     Body expected
@@ -16,6 +16,7 @@ var Response = require('./response/postResponse');
 router.get('/',addReply);
 
 function addReply(req,res){
+    // TODO: Send push notification to original user
     Post.findById(req.body.post_id,(err,post)=>{
         if(err || !post){
             var resp = new Response();

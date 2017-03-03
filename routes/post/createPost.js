@@ -17,7 +17,7 @@ function cleanReq(req,res,next){
 }
 
 function isValidPost(req,res,next){
-    req.body['server_time'] = new Date().getTime();
+    req.body['server_time'] = Number(new Date().getTime());
     var userPost = new Post(req.body);
     userPost.validate((err)=>{
         if(err){
