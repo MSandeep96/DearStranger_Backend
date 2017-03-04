@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../../database/Users/UserSchema');
-var Response = require('./response/signUserRes.js');
+var Response = require('./response/userResponse');
 var randTokenGen = require('rand-token');
 
 // @Route ../user/signuser @POST 
