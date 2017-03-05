@@ -33,7 +33,7 @@ router.use(function(req,res,next){
     }
     User.findById(id,function(err,user){
         if(err || !user){
-            res.status(400).send(baseResponse);
+            res.status(403).send(baseResponse);
         }else if(access_token !== user.access_token){
             res.status(403).send(baseResponse);
         }else{
