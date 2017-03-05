@@ -12,7 +12,7 @@ function getposts(req,res){
     var presDate = new Date(Number(req.query.millis));
     var presDateRep = getDateRep(presDate);
     var pastDateRep = getWeekAgoDateRep(presDate);
-    console.log(presDateRep+" "+pastDateRep);
+    console.log(presDate+"\n"+presDateRep+" "+pastDateRep);
     Post
     .find({ 
         user_id : req.query.user_id,
