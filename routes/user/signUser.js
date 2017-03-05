@@ -76,6 +76,8 @@ function storeUser(doc, req, res) {
     }
     // TODO: 
     // doc.access_token = randTokenGen.generate(12);
+    doc.fcm_token = req.body.fcm_token;
+    doc.prof_pic = req.body.prof_pic;
     doc.access_token = "666";
     doc.save((err, newDoc) => {
         if (err) {
