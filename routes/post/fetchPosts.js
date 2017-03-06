@@ -11,7 +11,6 @@ router.get('/',getposts);
 function getposts(req,res){
     var presDateRep = Number(req.query.date_rep);
     var pastDateRep = getWeekAgoDateRep(presDateRep);
-    console.log(presDate+"\n"+presDateRep+" "+pastDateRep);
     Post
     .find({ 
         user_id : req.query.user_id,
@@ -28,9 +27,8 @@ function getposts(req,res){
 
 function getWeekAgoDateRep(presDate){
     var date = new Date();
-    date.setDate(presDate%100);
-    date.setMonth((presDate/100) %100);
-    date.setFullYear((presDate/10000));
+    date.setFullYear((presDate / 10000));
+    date.setMonth((presDate / 100) % 100 -1);
     date.setDate(date.getDate()-7);
     return date.getFullYear()*10000+(date.getMonth()+1)*100+date.getDate();
 }
