@@ -29,8 +29,7 @@ Response.prototype.matchedpost = function(post){
 Response.prototype.postCreated = function(server_time){
     this.success = true;
     this.response = "Success";
-    var serverDate = new Date(server_time);
-    this.created_on = serverDate.getTime();
+    this.created_on = server_time;
     this.posted = true;
 }
 

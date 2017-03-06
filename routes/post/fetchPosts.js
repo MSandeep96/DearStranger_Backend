@@ -16,6 +16,7 @@ function getposts(req,res){
         user_id : req.query.user_id,
         date_rep : {$lte:presDateRep, $gt: pastDateRep }
     })
+    .sort({"date_rep":-1})
     .select('client_time date_rep status')
     .exec((err,posts)=>{
         if(err) throw err;
