@@ -17,7 +17,7 @@ function cleanReq(req,res,next){
 }
 
 function isValidPost(req,res,next){
-    req.body['server_time'] = new Date().toUTCString();
+    req.body['server_time'] = new Date().toISOString();
     var userPost = new Post(req.body);
     userPost.validate((err)=>{
         if(err){
