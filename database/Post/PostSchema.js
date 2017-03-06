@@ -15,7 +15,7 @@ var postSchema = new Schema({
         required : true
     },
     server_time : {
-        type : Number,
+        type : String,
         required : true
     },
     date_rep : {

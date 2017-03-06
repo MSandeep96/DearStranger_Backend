@@ -4,14 +4,13 @@ var router = express.Router();
 var Post = require('../../database/Post/PostSchema');
 var Response = require('./response/postResponse');
 
-// ../post/fetchpost?user_id=x&access_token=y&millis=xyzxyz @GET
+// ../post/fetchpost?user_id=x&access_token=y&date_rep=yyyymmdd @GET
 
 router.get('/',getposts);
 
 function getposts(req,res){
-    var presDate = new Date(Number(req.query.millis));
-    var presDateRep = getDateRep(presDate);
-    var pastDateRep = getWeekAgoDateRep(presDate);
+    var presDateRep = Number(req.query.date_rep);
+    var pastDateRep = getWeekAgoDateRep(presDateRep);
     console.log(presDate+"\n"+presDateRep+" "+pastDateRep);
     Post
     .find({ 
@@ -27,11 +26,11 @@ function getposts(req,res){
     });
 }
 
-function getDateRep(date){
-    return date.getFullYear()*10000+(date.getMonth()+1)*100+date.getDate();
-}
-
-function getWeekAgoDateRep(date){
+function getWeekAgoDateRep(presDate){
+    var date = new Date();
+    date.setDate(presDate%100);
+    date.setMonth((presDate/100) %100);
+    date.setFullYear((presDate/10000));
     date.setDate(date.getDate()-7);
     return date.getFullYear()*10000+(date.getMonth()+1)*100+date.getDate();
 }
