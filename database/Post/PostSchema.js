@@ -16,7 +16,6 @@ var postSchema = new Schema({
     },
     client_time : {
         type : Number,
-        required : true
     },
     server_time : {
         type : String,

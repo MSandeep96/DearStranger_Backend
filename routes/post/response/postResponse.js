@@ -26,11 +26,11 @@ Response.prototype.matchedpost = function(post){
     this.post = post;
 }
 
-Response.prototype.postCreated = function(server_time){
+Response.prototype.postCreated = function(server_time,post_id){
     this.success = true;
     this.response = "Success";
     this.created_on = server_time;
-    this.posted = true;
+    this.post_id = post_id;
 }
 
 Response.prototype.fetchedPosts = function(posts){
