@@ -35,7 +35,7 @@ function savePost(req,res){
     req.body.save((err,post)=>{
         if(err) throw err;
         var resp = new Response();
-        resp.postCreated(post.server_time);
+        resp.postCreated(post.server_time,post._id);
         res.status(200).send(resp);
     });
 }

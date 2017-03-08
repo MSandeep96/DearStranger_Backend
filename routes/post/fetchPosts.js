@@ -17,7 +17,7 @@ function getposts(req,res){
         date_rep : {$lte:presDateRep, $gt: pastDateRep }
     })
     .sort({"date_rep":-1})
-    .select('server_time date_rep status')
+    .select('server_time date_rep status title')
     .exec((err,posts)=>{
         if(err) throw err;
         var resp = new Response();
