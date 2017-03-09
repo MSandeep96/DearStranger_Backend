@@ -13,6 +13,7 @@ var rateqi = require('./rateqi');
 var markRead = require('./markRead');
 var addReply = require('./addReply');
 var editPost = require('./editPost');
+var getContent = require('./getPostContent');
 
 var baseResponse = {
     success : false,
@@ -54,5 +55,6 @@ router.use('/rateai',rateai);
 router.use('/addreply',addReply);
 router.use('/markread',markRead);
 router.use('/editpost',editPost);
+router.use('/getcontent',getContent);
 
 module.exports = router;

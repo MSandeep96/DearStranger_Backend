@@ -14,6 +14,12 @@ Response.prototype.gotPost = function(post){
     this.post = post;
 }
 
+Response.prototype.gotContent = function (post) {
+    this.success = true;
+    this.response = "Success";
+    this.content = post.content;
+}
+
 Response.prototype.matchpost = function(post){
     this.success = true;
     this.response = "Success";
